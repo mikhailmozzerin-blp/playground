@@ -12,3 +12,6 @@ This repository is just a personal playground for trying SQL/KPI ideas and schem
 - port: 3307 (override via `MYSQL_PORT` env var)
 - user/pass: blp/blp
 - db: blp_kpi
+
+
+https://dbdiagram.io/d/Analytics-db-v2_ext-699c2bd7bd82f5fce281a648

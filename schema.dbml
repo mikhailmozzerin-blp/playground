@@ -1,0 +1,401 @@
+// ============================================================
+// ENUMS
+// ============================================================
+
+Enum task_status_enum {
+  OPEN
+  DONE
+  CANCELLED
+}
+
+Enum task_edit_mode_enum {
+  GET
+  EDIT
+}
+
+Enum task_exception_scope_enum {
+  HEADER
+  POSITION
+}
+
+Enum task_exception_status_enum {
+  OPEN
+  RESOLVED
+}
+
+Enum risk_level_enum {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+Enum prediction_field_type_enum {
+  OBJECT
+  ARRAY
+  SCALAR
+}
+
+Enum purchase_order_type_enum {
+  NORMAL_ORDER
+  BLANKET_ORDER
+  BUDGET_ORDER
+  CONTRACT_ORDER
+  SCHEDULING_AGREEMENT
+  SERVICE_ORDER
+  CONSIGNMENT_STOCK_ORDER
+  FREIGHT_ORDER
+}
+
+Enum config_scope_type_enum {
+  GLOBAL
+  ORG
+  WORKFLOW
+  DASHBOARD
+  KPI
+}
+
+Enum config_value_type_enum {
+  STRING
+  NUMBER
+  BOOL
+  JSON
+  DATE
+}
+
+// ============================================================
+// TABLES
+// ============================================================
+
+Table users {
+  user_id binary(16) [pk]
+  name varchar(255)
+  is_machine boolean
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    is_machine
+    name
+  }
+}
+
+Table documents {
+  doc_id binary(16) [pk]
+  org_id binary(16) [not null]
+  name varchar(255)
+  document_type varchar(64)
+  external_database_id varchar(128)
+  received_at datetime
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    org_id
+    (org_id, document_type)
+    document_type
+    external_database_id
+    received_at
+  }
+}
+
+Table document_metadata {
+  document_metadata_id binary(16) [pk]
+  doc_id binary(16) [not null]
+  category varchar(64) [not null]
+  modified_by varchar(255)
+  created_by varchar(255)
+  updated_by varchar(255)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    doc_id
+    category
+  }
+}
+
+Table workflow_instances {
+  workflow_instance_id binary(16) [pk]
+  name varchar(255)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table tasks {
+  task_id binary(16) [pk]
+  workflow_instance_id binary(16)
+  doc_id binary(16)
+  task_type varchar(64)
+  business_process_type varchar(64)
+  status task_status_enum
+  start_date datetime
+  end_date datetime
+  assigned_to_user_id binary(16)
+  assigned_at datetime
+  sla_due_at datetime
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    workflow_instance_id
+    doc_id
+    status
+    task_type
+    business_process_type
+    (assigned_to_user_id, status)
+    (doc_id, start_date)
+    start_date
+    end_date
+  }
+}
+
+Table document_versions {
+  version_id binary(16) [pk]
+  doc_id binary(16) [not null]
+  task_id binary(16)
+  version_number int [not null]
+  created_by_user_id binary(16)
+  created_at datetime [not null]
+
+  Indexes {
+    (doc_id, version_number) [unique]
+    task_id
+  }
+}
+
+Table prediction_fields {
+  field_id binary(16) [pk]
+  version_id binary(16) [not null]
+  parent_field_id binary(16)
+  metadata_id binary(16)
+  field_key varchar(128)
+  field_type prediction_field_type_enum [not null]
+  value_string text
+  value_number decimal(18,6)
+  value_date datetime
+  value_bool boolean
+  modified_by binary(16)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    field_key
+    (version_id, field_type)
+    (version_id, field_key)
+    parent_field_id
+    metadata_id
+  }
+}
+
+Table task_actions {
+  action_id binary(16) [pk]
+  task_id binary(16)
+  user_id binary(16)
+  action varchar(64)
+  datetime datetime
+  external_id varchar(128)
+  external_system varchar(32)
+  reassign_from_user_id binary(16)
+  reassign_to_user_id binary(16)
+  reassign_comment varchar(255)
+  action_metadata_json json
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    (task_id, datetime)
+    (user_id, datetime)
+    (action, datetime)
+    (reassign_to_user_id, datetime)
+  }
+}
+
+Table task_edits {
+  edit_id binary(16) [pk]
+  task_id binary(16)
+  user_id binary(16)
+  datetime datetime
+  mode task_edit_mode_enum
+  edit_type varchar(128)
+  edit_value text
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    (task_id, datetime)
+    (user_id, datetime)
+    (mode, datetime)
+    edit_type
+  }
+}
+
+Table task_exceptions {
+  exception_id binary(16) [pk]
+  task_id binary(16)
+  scope task_exception_scope_enum
+  position_type varchar(64)
+  position_id varchar(128)
+  todo_type varchar(128)
+  status task_exception_status_enum
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  resolved_at datetime
+  resolved_by_user_id binary(16)
+  deviation_amount decimal(18,2)
+  deviation_percent decimal(9,4)
+  risk_level risk_level_enum
+}
+
+Table dt_payment_conditions {
+  id binary(16) [pk]
+  name varchar(255)
+  sconto_percent decimal(9,4)
+  sconto_days int
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    name
+  }
+}
+
+Table dt_business_partners {
+  id binary(16) [pk]
+  name varchar(255)
+  payment_condition_id binary(16)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    payment_condition_id
+    name
+  }
+}
+
+Table dt_invoices {
+  id binary(16) [pk]
+  external_id varchar(128) [unique]
+  business_partner_id binary(16)
+  total_amount decimal(18,2)
+  invoice_status varchar(64)
+  posting_date datetime
+  payment_date datetime
+  cash_discount_amount decimal(18,2)
+  payment_condition_id binary(16)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table dt_purchase_orders {
+  id binary(16) [pk]
+  external_id varchar(128)
+  purchase_order_type purchase_order_type_enum
+  payment_condition_id binary(16)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table dt_delivery_notes {
+  id binary(16) [pk]
+  created_at datetime [not null]
+  updated_at datetime [not null]
+}
+
+Table config_kv {
+  config_id binary(16) [pk]
+  scope_type config_scope_type_enum
+  scope_id binary(16)
+  config_key varchar(128)
+  value_type config_value_type_enum
+  value_string text
+  value_number decimal(18,6)
+  value_bool boolean
+  value_json json
+  value_date datetime
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  updated_by_user_id binary(16)
+
+  Indexes {
+    (scope_type, scope_id, config_key) [unique]
+    config_key
+    updated_at
+  }
+}
+
+// ============================================================
+// NEW TABLE: document_fields
+// ============================================================
+
+Table document_fields {
+  field_id binary(16) [pk]
+  doc_id binary(16) [not null] // Linked directly to document
+  parent_field_id binary(16)
+  metadata_id binary(16)
+  field_key varchar(128)
+  field_type prediction_field_type_enum [not null]
+  value_string text
+  value_number decimal(18,6)
+  value_date datetime
+  value_bool boolean
+  modified_by binary(16)
+  created_at datetime [not null]
+  updated_at datetime [not null]
+
+  Indexes {
+    doc_id
+    field_key
+    (doc_id, field_key)
+    (doc_id, field_type)
+    parent_field_id
+  }
+}
+
+// ============================================================
+// RELATIONSHIPS
+// ============================================================
+
+// Linking the non-versioned fields to the document
+Ref: document_fields.doc_id > documents.doc_id
+Ref: document_fields.parent_field_id > document_fields.field_id
+Ref: document_fields.modified_by > users.user_id
+
+// Document & Metadata
+Ref: document_metadata.doc_id > documents.doc_id
+
+// Core Tasks
+Ref: tasks.workflow_instance_id > workflow_instances.workflow_instance_id
+Ref: tasks.doc_id > documents.doc_id
+Ref: tasks.assigned_to_user_id > users.user_id
+
+// Document Versioning
+Ref: document_versions.doc_id > documents.doc_id
+Ref: document_versions.task_id > tasks.task_id
+Ref: document_versions.created_by_user_id > users.user_id
+
+// Prediction Fields (Linked to Versions)
+Ref: prediction_fields.version_id > document_versions.version_id
+Ref: prediction_fields.parent_field_id > prediction_fields.field_id
+Ref: prediction_fields.modified_by > users.user_id
+
+// Task Life-cycle
+Ref: task_actions.task_id > tasks.task_id
+Ref: task_actions.user_id > users.user_id
+Ref: task_actions.reassign_from_user_id > users.user_id
+Ref: task_actions.reassign_to_user_id > users.user_id
+
+Ref: task_edits.task_id > tasks.task_id
+Ref: task_edits.user_id > users.user_id
+
+Ref: task_exceptions.task_id > tasks.task_id
+Ref: task_exceptions.resolved_by_user_id > users.user_id
+
+// Master Data (DT)
+Ref: dt_business_partners.payment_condition_id > dt_payment_conditions.id
+Ref: dt_invoices.business_partner_id > dt_business_partners.id
+Ref: dt_invoices.payment_condition_id > dt_payment_conditions.id
+Ref: dt_purchase_orders.payment_condition_id > dt_payment_conditions.id
+
+// External Links & Config
+Ref: documents.external_database_id > dt_invoices.external_id
+Ref: config_kv.updated_by_user_id > users.user_id
