@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/queries/active_approvers_with_delays.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/active_invoices_at_risk_losing_sconto.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/annual_cost_savings_ytd_chf.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/average_master_data_price_deviation.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/average_payment_delay_days.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/high_touch_rate.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/low_touch_rate.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/payment_term_adherence_pct.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/potential_time_waste_minutes.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/rework_escalation_ratio.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/sconto_utilization_pct_amount.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/sconto_utilization_pct_cash.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/working_capital_impact_amount_days_until_writeback.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/zero_touch_rate.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+    <file url="file://$PROJECT_DIR$/queries/missed_sconto_value_ytd_chf.sql" value="39715252-4aa1-4a6a-b409-6118a9cc510f" />
+  </component>
+</project>

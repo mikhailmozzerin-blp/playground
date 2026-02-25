@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/init/01_create_schema_analytics.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/active_approvers_with_delays.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/active_invoices_at_risk_losing_sconto.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/annual_cost_savings_ytd_chf.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/automated_approvals_pct.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/average_payment_delay_per_month.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/declined_approvals.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/detected_missing_master_data_entries.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/early_payment_loss_ytd_chf.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/exception_intelligence_summary.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/average_master_data_price_deviation.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/average_payment_delay_days.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/high_touch_rate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/low_touch_rate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/payment_term_adherence_pct.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/potential_time_waste_minutes.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/rework_escalation_ratio.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/sconto_utilization_pct_amount.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/sconto_utilization_pct_cash.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/working_capital_impact_amount_days_until_writeback.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/fixed/zero_touch_rate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/goods_receipt_to_pay_cycle_time_days.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/goods_receipt_to_writeback_cycle_time_days.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/invoice_to_pay_cycle_time_days.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/invoice_to_writeback_cycle_time_days.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/invoices_processed_per_fte.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/liquidity_optimization_score_per_supplier.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/manual_approval_cycle_time_minutes.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/manual_hours_saved_mtd.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/manual_hours_saved_window.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/master_data_price_match_accuracy_pct.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/master_data_quality_index.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/missed_sconto_value_ytd_chf.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/on_time_payment_rate_pct.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/posting_reversal_rate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/spend_split_by_po_type.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/spend_split_po_vs_non_po.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/top_bottleneck_step_by_avg_duration.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/workflow_bottleneck_idle_seconds.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/queries/working_capital_impact_amount_days_until_writeback.sql" dialect="MySQL" />
+  </component>
+</project>
