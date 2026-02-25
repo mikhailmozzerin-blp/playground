@@ -1,12 +1,11 @@
 WITH po_data AS (
     -- Get PO IDs from prediction fields efficiently
     -- Filtering by key first is faster than a wide GROUP BY
-    SELECT t.doc_id,
-           pf.value_string AS po_external_id
-    FROM prediction_fields pf
-             JOIN tasks t ON t.task_id = pf.task_id
-    WHERE pf.field_key IN ('purchase_order_id')
-      AND pf.version_end_date IS NULL),
+    SELECT df.doc_id,
+           df.value_string AS po_external_id
+    FROM document_fields df
+    WHERE df.field_key IN ('purchase_order_id')
+),
      combined_pc AS (
          -- Population: all invoices processed by BLP
          -- We bring in org_id for the final breakdown

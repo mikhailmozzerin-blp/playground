@@ -1,7 +1,7 @@
 EXPLAIN SELECT d.doc_id, p.field_key
 FROM documents d
          JOIN tasks t ON t.doc_id = d.doc_id
-         JOIN v_current_predictions p ON p.doc_id = d.doc_id # added to be able to filter by document fields if needed
+         JOIN document_fields p ON p.doc_id = d.doc_id
 WHERE p.field_type = 'SCALAR'
   AND NOT EXISTS (SELECT 1
                   FROM task_edits te

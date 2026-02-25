@@ -2,7 +2,7 @@ SELECT DISTINCT d.doc_id,
                 touches.total_count
 FROM documents d
          JOIN tasks t ON t.doc_id = d.doc_id
-         LEFT JOIN v_current_predictions p ON p.doc_id = d.doc_id
+         JOIN document_fields p ON p.doc_id = d.doc_id
          JOIN LATERAL (
     SELECT (
                (SELECT COUNT(*)

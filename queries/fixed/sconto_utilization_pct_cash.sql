@@ -1,12 +1,10 @@
 WITH po_data AS (
     -- Extracts PO external ID from prediction fields
     SELECT
-        t.doc_id,
-        pf.value_string AS po_external_id
-    FROM prediction_fields pf
-             JOIN tasks t ON t.task_id = pf.task_id
-    WHERE pf.field_key IN ('purchase_order_id')
-      AND pf.version_end_date IS NULL
+        df.doc_id,
+        df.value_string AS po_external_id
+    FROM document_fields df
+    WHERE df.field_key IN ('purchase_order_id')
 ),
      combined_pc AS (
          -- Population: all invoices processed (Digital Twin Invoice + Documents)
