@@ -13,11 +13,13 @@
         - (or just ask someone to run it from his local and create one more schema in dms-dev??)
     - How to fill the schema with data?
         - Implement events and logic to persist the metrics
-          1. New document
+          1. New document → **NewDocumentAnalyticsEvent**
              - insert into analytics_v2.document
              - insert into tasks
              - parse the prediction object and propagate task_exceptions, task_edits(?), prediction_fields, document_status, task_actions
-          2. 
+          2. New document version committed → **NewDocumentVersionAnalyticsEvent**
+             - insert into analytics_v2.document_version
+             - insert into document_fields
         - Generate some random data based on existing datasync data + dms data
     - In a dev environment we can join with _dms tables, but what to do with _datasync?
         - Copy datasync db snapshot to _dms db?
