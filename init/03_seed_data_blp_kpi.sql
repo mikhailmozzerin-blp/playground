@@ -1138,28 +1138,10 @@ UPDATE document_fields df
 JOIN prediction_fields pf ON pf.field_id = df.field_id
 SET df.parent_field_id = pf.parent_field_id;
 
-INSERT INTO document_fields_json (doc_id, fields_json, modified_by, created_at, updated_at)
-SELECT df.doc_id,
-       JSON_ARRAYAGG(
-               JSON_OBJECT(
-                       'parent_field_id', IF(df.parent_field_id IS NULL, NULL, BIN_TO_UUID(df.parent_field_id)),
-                       'metadata_id', IF(df.metadata_id IS NULL, NULL, BIN_TO_UUID(df.metadata_id)),
-                       'field_type', df.field_type,
-                       'field_key', df.field_key,
-                       'value',
-                       CASE
-                           WHEN df.value_bool IS NOT NULL THEN JSON_EXTRACT(IF(df.value_bool, 'true', 'false'), '$')
-                           WHEN df.value_number IS NOT NULL THEN df.value_number
-                           WHEN df.value_date IS NOT NULL THEN DATE_FORMAT(df.value_date, '%Y-%m-%d %H:%i:%s')
-                           ELSE df.value_string
-                           END
-               )
-       ) AS fields_json,
-       MAX(df.modified_by) AS modified_by,
-       MIN(df.created_at)  AS created_at,
-       MAX(df.updated_at)  AS updated_at
-FROM document_fields df
-GROUP BY df.doc_id;
+INSERT INTO analytics.document_fields_json (doc_id, fields_json, modified_by, created_at, updated_at) VALUES (0x18034FA5D668438399A6C92ED1350C38, '{"InvoiceArray": [{"amount1": 234}], "InvoiceParent": {"InvoiceNumber": 123}}', 0xB0000001000000000000000000000003, '2025-08-15 09:30:00', '2026-02-26 09:14:35');
+INSERT INTO analytics.document_fields_json (doc_id, fields_json, modified_by, created_at, updated_at) VALUES (0x20000000AAAA40008000000000000001, '{"InvoiceArray": {"amount1": 234}, "InvoiceParent": {"InvoiceNumber": 123}}', 0xA0000001000000000000000000000001, '2025-08-10 14:05:01', '2026-02-26 09:10:07');
+INSERT INTO analytics.document_fields_json (doc_id, fields_json, modified_by, created_at, updated_at) VALUES (0x20000000BBBB40008000000000000002, '{"InvoiceArray": {"amount2": 123}, "InvoiceParent": {"InvoiceNumber": 123}}', 0xA0000001000000000000000000000001, '2025-08-11 10:35:01', '2026-02-26 09:13:52');
+
 
 
 -- -----------------------------------------------
