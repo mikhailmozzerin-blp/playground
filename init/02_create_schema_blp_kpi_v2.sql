@@ -72,13 +72,21 @@ CREATE TABLE `document_versions`
 (
     `version_id`         BINARY(16) NOT NULL,
     `doc_id`             BINARY(16) NOT NULL,
-    `task_id`            BINARY(16),
     `version_number`     INT        NOT NULL,
     `created_by_user_id` BINARY(16),
     `created_at`         DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`version_id`),
-    UNIQUE KEY `document_versions_uq_doc_version` (`doc_id`, `version_number`),
-    KEY `document_versions_index_task` (`task_id`)
+    UNIQUE KEY `document_versions_uq_doc_version` (`doc_id`, `version_number`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+CREATE TABLE `document_version_tasks`
+(
+    `version_id` BINARY(16) NOT NULL,
+    `task_id`    BINARY(16) NOT NULL,
+    `created_at` DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`version_id`, `task_id`),
+    KEY `document_version_tasks_index_task` (`task_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -127,6 +135,17 @@ CREATE TABLE `document_fields`
     KEY `document_fields_index_doc_key` (`doc_id`, `field_key`),
     KEY `document_fields_index_doc_type` (`doc_id`, `field_type`),
     KEY `document_fields_index_parent` (`parent_field_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+CREATE TABLE `document_fields_json`
+(
+    `doc_id`      BINARY(16) NOT NULL,
+    `fields_json` JSON,
+    `modified_by` BINARY(16),
+    `created_at`  DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`doc_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -290,9 +309,11 @@ ALTER TABLE `tasks`
 ALTER TABLE `document_versions`
     ADD CONSTRAINT `fk_dv_doc` FOREIGN KEY (`doc_id`) REFERENCES `documents` (`doc_id`);
 ALTER TABLE `document_versions`
-    ADD CONSTRAINT `fk_dv_task` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`task_id`);
-ALTER TABLE `document_versions`
     ADD CONSTRAINT `fk_dv_created_by` FOREIGN KEY (`created_by_user_id`) REFERENCES `users` (`user_id`);
+ALTER TABLE `document_version_tasks`
+    ADD CONSTRAINT `fk_dvt_version` FOREIGN KEY (`version_id`) REFERENCES `document_versions` (`version_id`);
+ALTER TABLE `document_version_tasks`
+    ADD CONSTRAINT `fk_dvt_task` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`task_id`);
 ALTER TABLE `prediction_fields`
     ADD CONSTRAINT `fk_pf_version` FOREIGN KEY (`version_id`) REFERENCES `document_versions` (`version_id`);
 ALTER TABLE `prediction_fields`
@@ -305,6 +326,10 @@ ALTER TABLE `document_fields`
     ADD CONSTRAINT `fk_df_parent` FOREIGN KEY (`parent_field_id`) REFERENCES `document_fields` (`field_id`);
 ALTER TABLE `document_fields`
     ADD CONSTRAINT `fk_df_modified_by` FOREIGN KEY (`modified_by`) REFERENCES `users` (`user_id`);
+ALTER TABLE `document_fields_json`
+    ADD CONSTRAINT `fk_dfj_doc` FOREIGN KEY (`doc_id`) REFERENCES `documents` (`doc_id`);
+ALTER TABLE `document_fields_json`
+    ADD CONSTRAINT `fk_dfj_modified_by` FOREIGN KEY (`modified_by`) REFERENCES `users` (`user_id`);
 ALTER TABLE `task_actions`
     ADD CONSTRAINT `fk_ta_task` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`task_id`);
 ALTER TABLE `task_actions`

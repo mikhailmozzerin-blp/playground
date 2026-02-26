@@ -1063,13 +1063,16 @@ FROM (SELECT pf.task_id,
       GROUP BY pf.task_id, pf.version_start_date, pf.version_end_date) s
          JOIN tasks t ON t.task_id = s.task_id;
 
-INSERT INTO document_versions (version_id, doc_id, task_id, version_number, created_by_user_id, created_at)
+INSERT INTO document_versions (version_id, doc_id, version_number, created_by_user_id, created_at)
 SELECT version_id,
        doc_id,
-       task_id,
        version_number,
        created_by_user_id,
        created_at
+FROM _version_map;
+
+INSERT INTO document_version_tasks (version_id, task_id, created_at)
+SELECT version_id, task_id, created_at
 FROM _version_map;
 
 INSERT INTO prediction_fields_final (field_id, version_id, parent_field_id, metadata_id, field_key, field_type, value_string,
@@ -1134,6 +1137,29 @@ JOIN (
 UPDATE document_fields df
 JOIN prediction_fields pf ON pf.field_id = df.field_id
 SET df.parent_field_id = pf.parent_field_id;
+
+INSERT INTO document_fields_json (doc_id, fields_json, modified_by, created_at, updated_at)
+SELECT df.doc_id,
+       JSON_ARRAYAGG(
+               JSON_OBJECT(
+                       'parent_field_id', IF(df.parent_field_id IS NULL, NULL, BIN_TO_UUID(df.parent_field_id)),
+                       'metadata_id', IF(df.metadata_id IS NULL, NULL, BIN_TO_UUID(df.metadata_id)),
+                       'field_type', df.field_type,
+                       'field_key', df.field_key,
+                       'value',
+                       CASE
+                           WHEN df.value_bool IS NOT NULL THEN JSON_EXTRACT(IF(df.value_bool, 'true', 'false'), '$')
+                           WHEN df.value_number IS NOT NULL THEN df.value_number
+                           WHEN df.value_date IS NOT NULL THEN DATE_FORMAT(df.value_date, '%Y-%m-%d %H:%i:%s')
+                           ELSE df.value_string
+                           END
+               )
+       ) AS fields_json,
+       MAX(df.modified_by) AS modified_by,
+       MIN(df.created_at)  AS created_at,
+       MAX(df.updated_at)  AS updated_at
+FROM document_fields df
+GROUP BY df.doc_id;
 
 
 -- -----------------------------------------------
